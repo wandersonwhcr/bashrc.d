@@ -3,3 +3,12 @@ kubesh() {
 }
 
 export -f kubesh
+
+kubesecr() {
+    kubectl get secrets --output json $* \
+        | jq 'if .kind == "List" then .items[] else . end' \
+        | jq '.data[] |= @base64d' \
+        | jq '{ name: .metadata.name, data: .data}'
+}
+
+export -f kubesecr
