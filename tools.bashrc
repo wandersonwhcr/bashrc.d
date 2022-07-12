@@ -1,7 +1,5 @@
-b64enc() {
-    CONTENT="$1"
-    shift 1
-    echo -n "$CONTENT" | base64 --wrap 0 $*; echo
+base64enc() {
+    echo -n $* | base64 --wrap 0; echo
 }
 
-export -f b64enc
+export -f base64enc
