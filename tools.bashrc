@@ -1,5 +1,14 @@
-base64enc() {
-    echo -n $* | base64 --wrap 0; echo
+toBase64() {
+    cat <&0 \
+        | openssl enc -base64 -A
 }
 
-export -f base64enc
+toBase64Url() {
+    cat <&0 \
+        | toBase64 \
+        | tr '+/' '-_' \
+        | tr --delete '='
+}
+
+export -f toBase64
+export -f toBase64Url
