@@ -15,5 +15,5 @@ git_shadow() {
     GIT_COMMITTER_NAME="$USER_NAME" \
     GIT_COMMITTER_EMAIL="$USER_EMAIL" \
     GIT_COMMITTER_DATE="$USER_DATE" \
-        git rebase --reset-author --sign --no-signoff $*
+        git rebase --reset-author-date --sign --no-signoff $*
 }
