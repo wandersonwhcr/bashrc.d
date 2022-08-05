@@ -22,5 +22,3 @@ jwt() {
 
     echo "$JWT_HEADER.$JWT_PAYLOAD.$JWT_SIGNATURE"
 }
-
-export -f jwt

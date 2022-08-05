@@ -17,5 +17,3 @@ git_shadow() {
     GIT_COMMITTER_DATE="$USER_DATE" \
         git rebase --reset-author --sign --no-signoff $*
 }
-
-export -f git_shadow

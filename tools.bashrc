@@ -11,6 +11,3 @@ toBase64Url() {
         | tr '+/' '-_' \
         | tr --delete '='
 }
-
-export -f toBase64
-export -f toBase64Url
