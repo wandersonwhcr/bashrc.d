@@ -3,6 +3,8 @@
 #   git_shadow HEAD~1
 #   git_shadow --root
 #
+# TODO bug: variables work only with git commit
+#
 
 git_shadow() {
     USER_NAME=`git config user.name`
