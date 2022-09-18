@@ -1,3 +1,5 @@
+export HISTTIMEFORMAT="%F %T "
+
 toBase64() {
     cat <&0 \
         | sed --null-data 's/\n$//' \
