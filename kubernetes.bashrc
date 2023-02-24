@@ -26,9 +26,20 @@ kubesh() {
 }
 
 kubenode() {
+    KUBENODE_NAMESPACE_ARGS=""
     KUBENODE_METADATA_NAME="alpine-`date-to-identifier`"
     KUBENODE_NODESELECTOR_HOSTNAME="$1"
     shift
+
+    while test "$1"; do
+        case "$1" in
+            --namespace|-n)
+                shift
+                KUBENODE_NAMESPACE_ARGS="--namespace $1"
+                ;;
+        esac
+        shift
+    done
 
     KUBENODE_SPEC='
         {
@@ -63,11 +74,11 @@ kubenode() {
         --arg KUBENODE_METADATA_NAME "$KUBENODE_METADATA_NAME" \
         --arg KUBENODE_NODESELECTOR_HOSTNAME "$KUBENODE_NODESELECTOR_HOSTNAME" \
         --compact-output \
-        | kubectl create --filename - >/dev/null
+        | kubectl create $KUBENODE_NAMESPACE_ARGS --filename - >/dev/null
 
-    kubectl wait pods --for condition=Ready "$KUBENODE_METADATA_NAME" >/dev/null
-    kubectl exec --stdin --tty "$KUBENODE_METADATA_NAME" -- /bin/sh
-    kubectl delete pods "$KUBENODE_METADATA_NAME" >/dev/null
+    kubectl wait pods --for condition=Ready $KUBENODE_NAMESPACE_ARGS "$KUBENODE_METADATA_NAME"
+    kubectl exec --stdin --tty $KUBENODE_NAMESPACE_ARGS "$KUBENODE_METADATA_NAME" -- /bin/sh
+    kubectl delete pods $KUBENODE_NAMESPACE_ARGS "$KUBENODE_METADATA_NAME"
 }
 
 kubesecr() {
