@@ -74,7 +74,7 @@ kubenodesh() {
         --arg KUBENODESH_METADATA_NAME "$KUBENODESH_METADATA_NAME" \
         --arg KUBENODESH_NODESELECTOR_HOSTNAME "$KUBENODESH_NODESELECTOR_HOSTNAME" \
         --compact-output \
-        | kubectl create $KUBENODESH_NAMESPACE_ARGS --filename - >/dev/null
+        | kubectl create $KUBENODESH_NAMESPACE_ARGS --filename -
 
     kubectl wait pods --for condition=Ready $KUBENODESH_NAMESPACE_ARGS "$KUBENODESH_METADATA_NAME"
     kubectl exec --stdin --tty $KUBENODESH_NAMESPACE_ARGS "$KUBENODESH_METADATA_NAME" -- /bin/sh
