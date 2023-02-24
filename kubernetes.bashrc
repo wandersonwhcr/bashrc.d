@@ -25,6 +25,51 @@ kubesh() {
     kubectl run --rm --stdin --tty --image=alpine alpine-`date-to-identifier` $* -- /bin/sh
 }
 
+kubenode() {
+    KUBENODE_METADATA_NAME="alpine-`date-to-identifier`"
+    KUBENODE_NODESELECTOR_HOSTNAME="$1"
+    shift
+
+    KUBENODE_SPEC='
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "name": $KUBENODE_METADATA_NAME
+            },
+            "spec": {
+                "restartPolicy": "Never",
+                "terminationGracePeriodSeconds": 0,
+                "hostPID": true,
+                "hostIPC": true,
+                "hostNetwork": true,
+                "tolerations": [ { "operator": "Exists" } ],
+                "nodeSelector": { "kubernetes.io/hostname": $KUBENODE_NODESELECTOR_HOSTNAME },
+                "containers": [
+                    {
+                        "name": "alpine",
+                        "image": "alpine",
+                        "securityContext": { "privileged": true },
+                        "command": ["nsenter"],
+                        "args": ["-t", "1", "-m", "-u", "-i", "-n", "sleep", "infinity"]
+                    }
+                ]
+            }
+        }
+    '
+
+    jq "$KUBENODE_SPEC" \
+        --null-input \
+        --arg KUBENODE_METADATA_NAME "$KUBENODE_METADATA_NAME" \
+        --arg KUBENODE_NODESELECTOR_HOSTNAME "$KUBENODE_NODESELECTOR_HOSTNAME" \
+        --compact-output \
+        | kubectl create --filename - >/dev/null
+
+    kubectl wait pods --for condition=Ready "$KUBENODE_METADATA_NAME" >/dev/null
+    kubectl exec --stdin --tty "$KUBENODE_METADATA_NAME" -- /bin/sh
+    kubectl delete pods "$KUBENODE_METADATA_NAME" >/dev/null
+}
+
 kubesecr() {
     kubectl get secrets --output json $* \
         | jq 'if .kind == "List" then .items[] else . end' \
