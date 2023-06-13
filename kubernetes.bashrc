@@ -1,3 +1,5 @@
+KUBECTL_SORT="--sort-by .metadata.creationTimestamp"
+
 kubesh() {
     KUBESH_ARGS=""
 
