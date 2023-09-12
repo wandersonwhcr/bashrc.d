@@ -17,7 +17,6 @@ kubesh() {
                 KUBESH_ARGS="$KUBESH_ARGS --overrides $KUBESH_OVERRIDES"
                 ;;
             --print)
-                shift
                 KUBESH_COMMAND="echo $KUBESH_COMMAND"
                 ;;
             *)
