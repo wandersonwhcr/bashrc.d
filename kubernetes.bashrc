@@ -6,7 +6,7 @@ kubesh() {
 
     while test "$1"; do
         case "$1" in
-            --serviceaccount)
+            --serviceaccount|-sa)
                 shift;
                 KUBESH_OVERRIDES=`
                     jq '{ "spec": { "serviceAccountName": $KUBESH_SERVICEACCOUNT } }' \
