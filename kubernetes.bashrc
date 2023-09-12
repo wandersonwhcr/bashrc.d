@@ -2,6 +2,7 @@ KUBECTL_SORT="--sort-by .metadata.creationTimestamp"
 
 kubesh() {
     KUBESH_ARGS=""
+    KUBESH_COMMAND="kubectl"
 
     while test "$1"; do
         case "$1" in
@@ -15,6 +16,10 @@ kubesh() {
                 `
                 KUBESH_ARGS="$KUBESH_ARGS --overrides $KUBESH_OVERRIDES"
                 ;;
+            --print)
+                shift
+                KUBESH_COMMAND="echo $KUBESH_COMMAND"
+                ;;
             *)
                 KUBESH_ARGS="$KUBESH_ARGS $1"
                 ;;
@@ -24,7 +29,7 @@ kubesh() {
 
     set -- $KUBESH_ARGS
 
-    kubectl run --rm --stdin --tty --image=alpine:3.18 alpine-`date-to-identifier` $* -- /bin/sh
+    $KUBESH_COMMAND run --rm --stdin --tty --image=alpine:3.18 alpine-`date-to-identifier` $* -- /bin/sh
 }
 
 kubenodesh() {
