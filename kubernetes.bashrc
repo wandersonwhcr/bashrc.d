@@ -24,7 +24,7 @@ kubesh() {
 
     set -- $KUBESH_ARGS
 
-    kubectl run --rm --stdin --tty --image=alpine alpine-`date-to-identifier` $* -- /bin/sh
+    kubectl run --rm --stdin --tty --image=alpine:3.18 alpine-`date-to-identifier` $* -- /bin/sh
 }
 
 kubenodesh() {
