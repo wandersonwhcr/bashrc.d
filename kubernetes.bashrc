@@ -65,7 +65,7 @@ kubenodesh() {
                 "containers": [
                     {
                         "name": "alpine",
-                        "image": "alpine",
+                        "image": "alpine:3.18",
                         "securityContext": { "privileged": true },
                         "command": ["nsenter"],
                         "args": ["-t", "1", "-m", "-u", "-i", "-n", "sleep", "infinity"]
