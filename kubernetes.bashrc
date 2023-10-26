@@ -93,3 +93,28 @@ kubesecr() {
         | jq '.data[] |= @base64d' \
         | jq '{ name: .metadata.name, data: .data }'
 }
+
+kubeall() {
+    KUBEALL_ARGS=""
+    KUBEALL_NAMESPACED="--namespaced"
+
+    while test "$1"; do
+        case "$1" in
+            --namespaced)
+                KUBEALL_NAMESPACED="--namespaced"
+                ;;
+            --not-namespaced)
+                KUBEALL_NAMESPACED="--namespaced=false"
+                ;;
+            *)
+                KUBEALL_ARGS="$KUBEALL_ARGS $1"
+                ;;
+        esac
+        shift
+    done
+
+    set -- $KUBEALL_ARGS
+
+    kubectl api-resources --verbs list --output name $KUBEALL_NAMESPACED \
+        | xargs --max-args 1 kubectl get --show-kind --ignore-not-found $*
+}
