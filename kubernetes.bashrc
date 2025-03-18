@@ -28,7 +28,7 @@ kubesh() {
 
     set -- $KUBESH_ARGS
 
-    $KUBESH_COMMAND run --rm --stdin --tty --image=alpine:3.18 alpine-`date-to-identifier` $* -- /bin/sh
+    $KUBESH_COMMAND run --rm --stdin --tty --image=alpine:3.21 alpine-`date-to-identifier` $* -- /bin/sh
 }
 
 kubenodesh() {
@@ -65,7 +65,7 @@ kubenodesh() {
                 "containers": [
                     {
                         "name": "alpine",
-                        "image": "alpine:3.18",
+                        "image": "alpine:3.21",
                         "securityContext": { "privileged": true },
                         "command": ["nsenter"],
                         "args": ["-t", "1", "-m", "-u", "-i", "-n", "sleep", "infinity"]
