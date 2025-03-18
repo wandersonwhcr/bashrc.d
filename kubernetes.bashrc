@@ -91,7 +91,7 @@ kubesecr() {
     kubectl get secrets --output json $* \
         | jq 'if .kind == "List" then .items[] else . end' \
         | jq '.data[] |= @base64d' \
-        | jq '{ name: .metadata.name, data: .data }'
+        | jq '{ namespace: .metadata.namespace, name: .metadata.name, data: .data }'
 }
 
 kubeall() {
